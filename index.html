@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wheather report</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+
+        }
+
+        body {
+            background-color: white;
+        }
+
+        .card {
+            width: 90%;
+            max-width: 470px;
+            margin: 100px auto 0;
+            border-radius: 20px;
+            background: linear-gradient(135deg, aqua, #5b548a);
+            color: black;
+            padding: 40px 35px;
+            text-align: center;
+            border-radius: 20px;
+        }
+
+        .search {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+
+        }
+
+        .search-input {
+            border: 0;
+            outline: 0;
+            background: #ebfffc;
+            padding: 10px 25px;
+            height: 60px;
+            flex: 1;
+            margin-right: 16px;
+            font-size: 18px;
+            border-radius: 30px;
+            color: #555;
+        }
+
+        .btn {
+            border: 0;
+            outline: 0;
+            background: #ebfffc;
+            height: 50px;
+            width: 50px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        .wheather-icon {
+            width: 170px;
+            margin-top: 30px;
+        }
+
+        .wheather h1 {
+            font-size: 80px;
+            font-weight: 500;
+        }
+
+        .wheather h2 {
+            font-size: 45px;
+            font-weight: 400;
+            margin-top: -10px;
+        }
+
+        .details {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            margin-top: 50px;
+        }
+
+        .col {
+            display: flex;
+            align-items: center;
+            text-align: left;
+
+        }
+
+        .col img {
+            width: 40px;
+            margin-right: 10px;
+
+        }
+
+        .humidity,
+        .wind {
+            font-size: 28px;
+            margin-top: -6px;
+        }
+        .wheather{
+            display:none;
+        }
+        .error{
+            text-align: left;
+            margin-left:10px;
+            font-size: 14px;
+            margin-top:10px;
+            display:none;
+        }
+
+        @media screen  and (max-width:480px){
+            .card{
+                width:80%;
+                height:80%;
+                background-color: lightblue;
+            }
+
+            .search-input {
+            border: 0;
+            outline: 0;
+            background: #ebfffc;
+            padding: 10px 25px;
+            height: 50px;
+            flex: 1;
+            margin-right: 16px;
+            font-size: 18px;
+            border-radius: 30px;
+            color: #555;
+            width:70px;
+        }
+
+        .btn {
+            border: 0;
+            outline: 0;
+            background: #ebfffc;
+            height: 50px;
+            width: 50px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+            
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <div class="search">
+            <input class="search-input" type="text" placeholder="enter city name to check wheather" spellcheck="false">
+            <button class="btn">submit</button>
+            <!-- <i class="fa-solid fa-magnifying-glass"></i> -->
+        </div>
+        <div class="error">
+            <p>invalid city name</p>
+        </div>
+        <div class="wheather">
+            <img src="" alt="" class="whesther-icon">
+            <h1 class="temp">22 celsius</h1>
+            <h2 class="city">New Delhi</h2>
+            <div class="details">
+                <div class="col">
+                    <img src="C:\Users\lenovo\OneDrive\Desktop\images\humidity.png" alt="">
+                    <div>
+                        <p class="humidity">50%</p>
+                        <p>Humidity</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <img src="C:\Users\lenovo\OneDrive\Desktop\images\wind.png" alt="">
+                    <div>
+                        <p class="wind">15 km/h</p>
+                        <p>Wind</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+<script>
+    const apikey = "65bd8237a4be89b0d00789bf95e824e1";
+    const apiurl = "https://api.openweathermap.org/data/2.5/weather?&units=metric&q=";
+    const searchbox=document.querySelector(".search-input");
+    const searchbtn=document.querySelector(".btn");
+
+    async function checkwheather(city) {
+        const response = await fetch(apiurl + city + `&appid=${apikey}`);
+
+        if(response.status==404){
+            document.querySelector(".error").style.display="block";
+            document.querySelector(".wheather").style.display="none";
+        }else{
+        var data = await response.json();
+
+        //  console.log(data);
+
+        document.querySelector(".city").innerHTML=data.name;
+        document.querySelector(".temp").innerHTML=Math.round(data.main.temp) + "celsius";
+        document.querySelector(".humidity").innerHTML=data.main.humidity + "%";
+        document.querySelector(".wind").innerHTML=data.wind.speed + "km/h";
+    
+        document.querySelector(".error").style.display="none";
+        document.querySelector(".wheather").style.display="block";
+        }
+    }
+
+    searchbtn.addEventListener('click',()=>{
+        checkwheather(searchbox.value);
+        
+        
+    })
+
+    
+
+    
+
+</script>
+
+</html>
